@@ -1,8 +1,7 @@
 package com.builtbroken.mc.logp.gui;
 
+import com.builtbroken.mc.logp.data.ModData;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Primary handler for the GUI
@@ -21,6 +21,12 @@ import java.net.URL;
  */
 public class MainGUI extends Application
 {
+    public HashMap<String, ModData> modLoadData = new HashMap();
+
+    public Controller controller;
+    public PieChart chart;
+    public Stage stage;
+
     public static void main(String... args)
     {
         launch(args);
@@ -29,28 +35,29 @@ public class MainGUI extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        URL guiFile = getClass().getClassLoader().getResource("fx/main.fxml");
-        Parent root = FXMLLoader.load(guiFile);
+        this.stage = stage;
 
+        //Load file
+        URL guiFile = getClass().getClassLoader().getResource("fx/main.fxml");
+        FXMLLoader loader = new FXMLLoader(guiFile);
+        Parent root = loader.load();
+
+        //Create scene
         Scene scene = new Scene(root, 1000, 800);
 
+        //Load controller
+        controller = loader.getController();
+        controller.mainGUI = this;
+
+        //Find pie chart
         SplitPane splitPane = (SplitPane) scene.lookup("#splitPane");
-
         AnchorPane node = (AnchorPane) splitPane.getItems().get(1);
+        chart = (PieChart) node.lookup("#pieChartOne");
 
-        PieChart chart = (PieChart) node.lookup("#pieChartOne");
-
-        ObservableList<PieChart.Data> pieChartData =
-                FXCollections.observableArrayList(
-                        new PieChart.Data("Grapefruit", 13),
-                        new PieChart.Data("Oranges", 25),
-                        new PieChart.Data("Plums", 10),
-                        new PieChart.Data("Pears", 22),
-                        new PieChart.Data("Apples", 30));
-
-        chart.setData(pieChartData);
-
+        //Set title
         stage.setTitle("Forge Load Time Display");
+
+        //Load scene into stage and show
         stage.setScene(scene);
         stage.show();
     }

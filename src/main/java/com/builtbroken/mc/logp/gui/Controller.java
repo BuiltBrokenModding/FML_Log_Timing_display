@@ -1,6 +1,7 @@
 package com.builtbroken.mc.logp.gui;
 
 import com.builtbroken.mc.logp.data.ModData;
+import com.builtbroken.mc.logp.data.ModDataTimeSorter;
 import com.builtbroken.mc.logp.parse.LogParser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -80,6 +82,11 @@ public class Controller implements Initializable
 
             totalTime = actualLoadTime + excludedLoadIime;
 
+            //Sort values
+            Collections.sort(actualData, new ModDataTimeSorter());
+            Collections.sort(excludedData, new ModDataTimeSorter());
+
+            //Output totals for time
             chartTextData.append("Total Time: " + totalTime + "ms \n");
             chartTextData.append("Excluded Time: " + excludedLoadIime + "ms \n");
             chartTextData.append("Actual Time: " + actualLoadTime + "ms \n");
@@ -108,6 +115,7 @@ public class Controller implements Initializable
                 chartTextData.append("\t Total time percent: " + formatPercent(percentTotal) + " \n");
             }
 
+            //Build and add to display
             mainGUI.chartDataTextArea.setText(chartTextData.toString());
         }
         else

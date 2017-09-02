@@ -32,7 +32,7 @@ public class ModData
 
     public long getTime()
     {
-        long total = 0;
+        long total = 0; //TODO cache time?
         for(long p : loadTimes.values())
         {
             total += p;

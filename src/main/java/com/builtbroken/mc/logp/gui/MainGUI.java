@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -27,8 +28,9 @@ public class MainGUI extends Application
     public Controller controller;
     public Stage stage;
 
-    public PieChart chart;
+    public PieChart pieChart;
     public ListView chartList;
+    public TextArea chartDataTextArea;
 
     public static void main(String... args)
     {
@@ -55,7 +57,8 @@ public class MainGUI extends Application
         //Find pie chart
         SplitPane splitPane = (SplitPane) scene.lookup("#splitPane");
         AnchorPane node = (AnchorPane) splitPane.getItems().get(1);
-        chart = (PieChart) node.lookup("#pieChartOne");
+        pieChart = (PieChart) node.lookup("#pieChartOne");
+        chartDataTextArea = (TextArea) node.lookup("#chartDataTestArea");
 
         //Get data list
         node = (AnchorPane) splitPane.getItems().get(0);

@@ -1,5 +1,6 @@
 package com.builtbroken.mc.logp.gui;
 
+import com.builtbroken.mc.logp.data.ModData;
 import com.builtbroken.mc.logp.parse.LogParser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +10,9 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -21,8 +25,10 @@ public class Controller implements Initializable
 {
     public MainGUI mainGUI;
 
-    final FileChooser fileChooser = new FileChooser();
-    final LogParser parser = new LogParser();
+    public final FileChooser fileChooser = new FileChooser();
+    public final LogParser parser = new LogParser();
+
+    DecimalFormat percentFormat = new DecimalFormat("##.##%");
 
 
     @Override
@@ -38,18 +44,89 @@ public class Controller implements Initializable
         if (file != null)
         {
             parser.loadDataFromFile(file);
-            mainGUI.chart.setData(parser.buildPieChartData());
+            mainGUI.pieChart.setData(parser.buildPieChartData());
 
             mainGUI.chartList.getItems().clear();
 
-            for(PieChart.Data data : mainGUI.chart.getData())
+            for (PieChart.Data data : mainGUI.pieChart.getData())
             {
                 mainGUI.chartList.getItems().add(data.getName()); //TODO create custom factory to display with color
             }
+
+            StringBuilder chartTextData = new StringBuilder();
+            chartTextData.append("Load data information\n");
+            chartTextData.append("--------------------------------------\n");
+            chartTextData.append("Entries: " + parser.data.values().size() + "\n");
+
+            long actualLoadTime = 0;
+            long excludedLoadIime = 0;
+            long totalTime = 0;
+
+            List<ModData> actualData = new ArrayList();
+            List<ModData> excludedData = new ArrayList();
+            for (ModData data : parser.data.values())
+            {
+                if (!parser.excludeFromDisplay(data.modName))
+                {
+                    actualData.add(data);
+                    actualLoadTime += data.getTime();
+                }
+                else
+                {
+                    excludedData.add(data);
+                    excludedLoadIime += data.getTime();
+                }
+            }
+
+            totalTime = actualLoadTime + excludedLoadIime;
+
+            chartTextData.append("Total Time: " + totalTime + "ms \n");
+            chartTextData.append("Excluded Time: " + excludedLoadIime + "ms \n");
+            chartTextData.append("Actual Time: " + actualLoadTime + "ms \n");
+
+            //Output excluded entry data
+            chartTextData.append("--------------------------------------\n");
+            chartTextData.append("Excluded: " + excludedData.size() + "\n");
+            for (ModData data : excludedData)
+            {
+                float percentExcluded = (float) data.getTime() / (float) excludedLoadIime;
+                float percentTotal = (float) data.getTime() / (float) totalTime;
+                chartTextData.append(data.modName + ": " + formatTime(data.getTime()) + "ms \n");
+                chartTextData.append("\t Time percent: " + formatPercent(percentExcluded) + " \n");
+                chartTextData.append("\t Total time percent: " + formatPercent(percentTotal) + " \n");
+            }
+
+            //Output actual entry data
+            chartTextData.append("--------------------------------------\n");
+            chartTextData.append("Actual: " + excludedData.size() + "\n");
+            for (ModData data : actualData)
+            {
+                float percentExcluded = (float) data.getTime() / (float) actualLoadTime;
+                float percentTotal = (float) data.getTime() / (float) totalTime;
+                chartTextData.append(data.modName + ": " + formatTime(data.getTime()) + "ms \n");
+                chartTextData.append("\t Time percent: " + formatPercent(percentExcluded) + " \n");
+                chartTextData.append("\t Total time percent: " + formatPercent(percentTotal) + " \n");
+            }
+
+            mainGUI.chartDataTextArea.setText(chartTextData.toString());
         }
         else
         {
             //TODO display error?
         }
+    }
+
+    protected String formatTime(long time)
+    {
+        return "" + time; //TODO format
+    }
+
+    protected String formatPercent(float time)
+    {
+        if (time <= 0.001)
+        {
+            return "less than a percent";
+        }
+        return percentFormat.format(time);
     }
 }

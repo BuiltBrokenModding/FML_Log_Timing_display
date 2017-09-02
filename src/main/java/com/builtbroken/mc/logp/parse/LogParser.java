@@ -18,14 +18,14 @@ import java.util.regex.Pattern;
  */
 public class LogParser
 {
-    Pattern modIDPattern = Pattern.compile("^.*(?=(took))");
-    Pattern loadTimePattern = Pattern.compile("(?<=took).*");
+    public static final Pattern modIDPattern = Pattern.compile("^.*(?=(took))");
+    public static final Pattern loadTimePattern = Pattern.compile("(?<=took).*");
 
-    ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+    public final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
-    HashMap<String, ModData> data = new HashMap();
+    public final HashMap<String, ModData> data = new HashMap();
 
-    List<String> exclude = new ArrayList();
+    public final List<String> exclude = new ArrayList();
 
     public LogParser()
     {

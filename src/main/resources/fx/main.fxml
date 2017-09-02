@@ -1,43 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
+            prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.builtbroken.mc.logp.gui.Controller">
+    <children>
+        <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.29797979797979796" layoutX="39.0" layoutY="86.0"
+                   prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0"
+                   AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="-1.0"
+                              AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                            <children>
+                                <Button minWidth="100.0" mnemonicParsing="false" onAction="#loadModData"
+                                        prefWidth="500.0" text="Load File">
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </padding>
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </VBox.margin>
+                                </Button>
+                                <Separator prefWidth="200.0"/>
+                                <ListView id="entryList" fx:id="entryList" prefHeight="800.0" prefWidth="200.0"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="-1.0"
+                              AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                            <children>
+                                <Pane fx:id="mainViewPanel" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0"
+                                      AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                                    <children>
+                                        <PieChart id="pieChartOne" fx:id="pieChartOne" minHeight="400.0"
+                                                  minWidth="400.0"/>
+                                    </children>
+                                </Pane>
+                                <TextArea id="chartDataTestArea" fx:id="chartDataTestArea" prefHeight="200.0"
+                                          prefWidth="200.0"/>
+                            </children>
+                        </VBox>
+                    </children>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.builtbroken.mc.logp.gui.Controller">
-   <children>
-      <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.29797979797979796" layoutX="39.0" layoutY="86.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
-                     <children>
-                        <Button minWidth="100.0" mnemonicParsing="false" onAction="#loadModData" prefWidth="500.0" text="Load File">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Separator prefWidth="200.0" />
-                        <ListView id="entryList" fx:id="entryList" prefHeight="371.0" prefWidth="178.0" />
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <Pane fx:id="mainViewPanel" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
-                     <children>
-                        <PieChart id="pieChartOne" fx:id="pieChartOne" />
-                     </children>
-                  </Pane>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-   </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
 </AnchorPane>

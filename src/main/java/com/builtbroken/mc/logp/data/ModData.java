@@ -29,4 +29,14 @@ public class ModData
 
         return (long) Math.floor(time);
     }
+
+    public long getTime()
+    {
+        long total = 0;
+        for(long p : loadTimes.values())
+        {
+            total += p;
+        }
+        return total;
+    }
 }

@@ -4,6 +4,7 @@ import com.builtbroken.mc.logp.parse.LogParser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -37,7 +38,14 @@ public class Controller implements Initializable
         if (file != null)
         {
             parser.loadDataFromFile(file);
-            mainGUI.chart.setData(parser.buildChartData());
+            mainGUI.chart.setData(parser.buildPieChartData());
+
+            mainGUI.chartList.getItems().clear();
+
+            for(PieChart.Data data : mainGUI.chart.getData())
+            {
+                mainGUI.chartList.getItems().add(data.getName()); //TODO create custom factory to display with color
+            }
         }
         else
         {

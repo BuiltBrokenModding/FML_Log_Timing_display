@@ -6,7 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,18 +25,56 @@ public class LogParser
 
     HashMap<String, ModData> data = new HashMap();
 
+    List<String> exclude = new ArrayList();
 
-    public ObservableList<PieChart.Data> buildChartData()
+    public LogParser()
+    {
+        //List of entry names to exclude so to focus on mod load time
+        exclude.add("Minecraft Coder Pack");
+        exclude.add("Loading Item Renderer");
+        exclude.add("Loading Texture Map");
+        exclude.add("Minecraft");
+        exclude.add("Loading Model Manager");
+        exclude.add("Reloading listeners");
+        exclude.add("Loading Entity Renderer");
+        exclude.add("Default");
+        exclude.add("Forge Mod Loader");
+        exclude.add("GL Setup");
+        exclude.add("Minecraft Forge");
+    }
+
+
+    /**
+     * Called to convert the loaded data into a pie chart data array
+     *
+     * @return
+     */
+    public ObservableList<PieChart.Data> buildPieChartData()
     {
         pieChartData.clear();
 
-        pieChartData.add(new PieChart.Data("Grapefruit", 13));
-        pieChartData.add(new PieChart.Data("Oranges", 25));
-        pieChartData.add(new PieChart.Data("Plums", 10));
-        pieChartData.add(new PieChart.Data("Pears", 22));
-        pieChartData.add(new PieChart.Data("Apples", 30));
+        for (ModData data : this.data.values())
+        {
+            if (!excludeFromDisplay(data.modName))
+            {
+                System.out.println("Mod: " + data.modName + "  time " + data.getTime());
+                pieChartData.add(new PieChart.Data(data.modName, data.getTime()));
+            }
+        }
 
         return pieChartData;
+    }
+
+    public boolean excludeFromDisplay(String modName)
+    {
+        for (String name : exclude)
+        {
+            if (modName.equalsIgnoreCase(name))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void loadDataFromFile(File file)
@@ -76,17 +116,17 @@ public class LogParser
             //Get mod/package running
 
             Matcher m = modIDPattern.matcher(remains);
-            if(m.find())
+            if (m.find())
             {
-                String mod = m.group(0);
+                String mod = m.group(0).trim();
                 m = loadTimePattern.matcher(remains);
-                if(m.find())
+                if (m.find())
                 {
-                    String load = m.group(0);
+                    String load = m.group(0).trim();
 
                     ModData modData;
 
-                    if(!data.containsKey(mod))
+                    if (!data.containsKey(mod))
                     {
                         modData = new ModData(mod);
                         data.put(mod, modData);

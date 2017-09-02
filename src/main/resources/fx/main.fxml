@@ -6,7 +6,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.builtbroken.mc.logp.gui.Controller">
    <children>
       <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.29797979797979796" layoutX="39.0" layoutY="86.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
@@ -24,6 +23,7 @@
                            </VBox.margin>
                         </Button>
                         <Separator prefWidth="200.0" />
+                        <ListView id="entryList" fx:id="entryList" prefHeight="371.0" prefWidth="178.0" />
                      </children>
                   </VBox>
                </children>

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -24,8 +25,10 @@ public class MainGUI extends Application
     public HashMap<String, ModData> modLoadData = new HashMap();
 
     public Controller controller;
-    public PieChart chart;
     public Stage stage;
+
+    public PieChart chart;
+    public ListView chartList;
 
     public static void main(String... args)
     {
@@ -53,6 +56,10 @@ public class MainGUI extends Application
         SplitPane splitPane = (SplitPane) scene.lookup("#splitPane");
         AnchorPane node = (AnchorPane) splitPane.getItems().get(1);
         chart = (PieChart) node.lookup("#pieChartOne");
+
+        //Get data list
+        node = (AnchorPane) splitPane.getItems().get(0);
+        chartList = (ListView) node.lookup("#entryList");
 
         //Set title
         stage.setTitle("Forge Load Time Display");

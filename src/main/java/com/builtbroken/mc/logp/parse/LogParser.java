@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +59,10 @@ public class LogParser
             if (!excludeFromDisplay(data.modName))
             {
                 System.out.println("Mod: " + data.modName + "  time " + data.getTime());
+                for (Map.Entry<String, Long> entry : data.loadTimes.entrySet())
+                {
+                    System.out.println("\t" + entry.getKey() + ": " + entry.getValue());
+                }
                 pieChartData.add(new PieChart.Data(data.modName, data.getTime()));
             }
         }
@@ -100,43 +105,59 @@ public class LogParser
         }
     }
 
+    /**
+     * Called to read/parse a single line from a log
+     *
+     * @param inputLine
+     */
     protected void readLine(String inputLine)
     {
-        //TODO do with regex
         // input : [03:57:14] [main/DEBUG] [FML/]: Bar Step: ModIdMapping - Actually Additions took 0.000s
 
+        //We only care about lines containing bar step
         if (inputLine.contains("Bar Step"))
         {
             //Remove: [03:57:14] [main/DEBUG] [FML/]:
-            String line = inputLine.substring(inputLine.indexOf(":") + 1, inputLine.length());
+            String line = inputLine.substring(inputLine.indexOf("Bar Step:") + 9, inputLine.length()); //TODO do with regex
 
             //Get bar action
-            String action = line.substring(0, line.indexOf("-")).trim();
-            String remains = line.substring(line.indexOf("-") + 1, line.length()).trim();
+            String action = line.substring(0, line.indexOf("-")).trim(); //TODO do with regex
+            String remains = line.substring(line.indexOf("-") + 1, line.length()).trim(); //TODO do with regex
             //Get mod/package running
 
+            //Match mod name
             Matcher m = modIDPattern.matcher(remains);
             if (m.find())
             {
-                String mod = m.group(0).trim();
+                String modName = m.group(0).trim();
+
+                //Remove resource name prefix
+                if (modName.contains("FMLFileResourcePack"))
+                {
+                    modName = modName.replace("FMLFileResourcePack:", "");
+                }
+
+                //Match time
                 m = loadTimePattern.matcher(remains);
                 if (m.find())
                 {
-                    String load = m.group(0).trim();
+                    String loadTimeString = m.group(0).replace("s", "").trim();
 
+
+                    //Get or build data
                     ModData modData;
-
-                    if (!data.containsKey(mod))
+                    if (!data.containsKey(modName))
                     {
-                        modData = new ModData(mod);
-                        data.put(mod, modData);
+                        modData = new ModData(modName);
+                        data.put(modName, modData);
                     }
                     else
                     {
-                        modData = data.get(mod);
+                        modData = data.get(modName);
                     }
 
-                    modData.addEntry(action, load);
+                    //Add time entry to data
+                    modData.addEntry(action, loadTimeString);
                 }
             }
         }

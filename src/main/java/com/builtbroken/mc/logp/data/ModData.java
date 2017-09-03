@@ -19,7 +19,7 @@ public class ModData
 
     public void addEntry(String action, String load)
     {
-        loadTimes.put(action, toMilliSeconds(load.replace("s", "")));
+        loadTimes.put(action, toMilliSeconds(load));
     }
 
     protected long toMilliSeconds(String timeString)

@@ -1,3 +1,14 @@
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+
+    }
+}
+
 apply plugin: 'java'
 apply from: './gradle/scripts/clean.gradle'
 apply from: './gradle/scripts/getbuildnumber.gradle'
@@ -5,6 +16,13 @@ apply plugin: 'maven-publish'
 
 group = "com.${org}.${groupid}"
 archivesBaseName = "${archivebase}"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+apply plugin: 'javafx-gradle-plugin'
 
 def currentJvm = org.gradle.internal.jvm.Jvm.current()
 
@@ -18,7 +36,8 @@ ext.sharedManifest = manifest {
                "Created-By": currentJvm,
                "Implementation-Title": archivesBaseName,
                "Implementation-Version": version,
-               "Git-Hash": gitHash)
+               "Git-Hash": gitHash,
+               "Main-Class": mainClass)
     }
 
 task deobfJar(type: Jar) {
@@ -50,6 +69,14 @@ jar {
         from sharedManifest
      
      }
+}
+
+jfx {
+    // minimal requirement for jfxJar-task
+    mainClass = mainClass
+    
+    // minimal requirement for jfxNative-task
+    vendor = 'DarkGuardsman'
 }
 
 publishing {

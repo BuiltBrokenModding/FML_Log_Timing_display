@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,11 +22,17 @@ public class LogParser
     public static final Pattern loadTimePattern = Pattern.compile("(?<=took).*");
     public static final Pattern infoPattern = Pattern.compile("(?<=Bar Step:).*");
 
+    public static final int COMPRESS_IGNORE_SIZE = 10;
+    public static final float COMPRESS_CUT_OFF_PERCENT = 0.01f;
+
     public final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
     public final HashMap<String, ModData> data = new HashMap();
 
     public final List<String> exclude = new ArrayList();
+
+    private long totalLoadTime = -1L;
+    private long actualLoadTime = -1L;
 
     public LogParser()
     {
@@ -43,30 +48,55 @@ public class LogParser
         exclude.add("Forge Mod Loader");
         exclude.add("GL Setup");
         exclude.add("Minecraft Forge");
+        exclude.add("minecraft:textures/atlas/items.png");
+        exclude.add("minecraft:textures/atlas/blocks.png");
+        exclude.add("Minecraft Forge");
     }
 
+    public void clear()
+    {
+        data.clear();
+        pieChartData.clear();
+
+        totalLoadTime = -1L;
+        actualLoadTime = -1L;
+    }
 
     /**
      * Called to convert the loaded data into a pie chart data array
      *
      * @return
      */
-    public ObservableList<PieChart.Data> buildPieChartData()
+    public ObservableList<PieChart.Data> buildPieChartData(boolean exclude, boolean compress)
     {
         pieChartData.clear();
 
+        long compressedTime = 0L;
+
+        //Build cut off line for compression
+        long compressCutOff = (long) Math.floor((exclude ? getNonExcludedLoadTime() : getTotalLoadTime()) * COMPRESS_CUT_OFF_PERCENT);
+
+        //Loop data
         for (ModData data : this.data.values())
         {
-            if (!excludeFromDisplay(data.modName))
+            //Exclude data that is not desired int he output
+            if (!exclude || !excludeFromDisplay(data.modName))
             {
-                System.out.println("Mod: " + data.modName + "  time " + data.getTime());
-                for (Map.Entry<String, Long> entry : data.loadTimes.entrySet())
+                long time = data.getTime();
+                //If compression is turned on, ball up small values to improve output display
+                if (this.data.size() < COMPRESS_IGNORE_SIZE || !compress || time > compressCutOff)
                 {
-                    System.out.println("\t" + entry.getKey() + ": " + entry.getValue());
+                    pieChartData.add(new PieChart.Data(data.modName, time));
                 }
-                pieChartData.add(new PieChart.Data(data.modName, data.getTime()));
+                else
+                {
+                    compressedTime += time;
+                }
             }
         }
+
+        //Add balled up values as a single value
+        pieChartData.add(new PieChart.Data("Other", compressedTime));
 
         return pieChartData;
     }
@@ -83,8 +113,37 @@ public class LogParser
         return false;
     }
 
+    public long getTotalLoadTime()
+    {
+        if (totalLoadTime == -1)
+        {
+            for (ModData data : this.data.values())
+            {
+                totalLoadTime += data.getTime();
+            }
+        }
+        return totalLoadTime;
+    }
+
+    public long getNonExcludedLoadTime()
+    {
+        if (actualLoadTime == -1)
+        {
+            for (ModData data : this.data.values())
+            {
+                if (!excludeFromDisplay(data.modName))
+                {
+                    actualLoadTime += data.getTime();
+                }
+            }
+        }
+        return actualLoadTime;
+    }
+
     public void loadDataFromFile(File file)
     {
+        //Reset data
+        clear();
         //TODO create progress bar pop up window (lines / max lines)
         try (BufferedReader br = new BufferedReader(new FileReader(file)))
         {

@@ -10,66 +10,57 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.builtbroken.mc.logp.gui.Controller">
     <children>
-        <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.29797979797979796" layoutX="39.0" layoutY="86.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
-            <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                    <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
-                            <children>
-                                <Button defaultButton="true" minWidth="100.0" mnemonicParsing="false" onAction="#loadModData" prefWidth="500.0" text="Load File">
-                                    <padding>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </padding>
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </VBox.margin>
-                                </Button>
-                        <Separator prefWidth="200.0" />
-                        <ComboBox minWidth="150.0" prefWidth="500.0">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </ComboBox>
-                        <CheckBox id="excludeForgeCheckBox" fx:id="excludeForgeCheckBox" alignment="CENTER_RIGHT" mnemonicParsing="false" selected="true" text="Exclude Forge &amp; MC">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </CheckBox>
-                        <CheckBox id="compessModsCheckBox" fx:id="compessModsCheckBox" alignment="CENTER_RIGHT" mnemonicParsing="false" selected="true" text="Compess less than 1% load times">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </CheckBox>
-                        <Button id="reloadChartButton" fx:id="reloadChartButton" minWidth="100.0" mnemonicParsing="false" onAction="#reloadChartDisplay" prefWidth="500.0" text="Reload">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </Button>
-                                <Separator prefWidth="200.0" />
-                                <ListView id="entryList" fx:id="entryList" prefHeight="800.0" prefWidth="200.0" />
-                            </children>
-                        </VBox>
-                    </children>
-                </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                    <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
-                            <children>
-                                <Pane fx:id="mainViewPanel" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
-                                    <children>
-                                        <PieChart id="pieChartOne" fx:id="pieChartOne" minHeight="400.0" minWidth="400.0" />
-                                    </children>
-                                </Pane>
-                                <TextArea id="chartDataTestArea" fx:id="chartDataTestArea" minHeight="200.0" prefHeight="400.0" prefWidth="200.0" />
-                            </children>
-                        </VBox>
-                    </children>
-
-                </AnchorPane>
-            </items>
-        </SplitPane>
+      <HBox>
+         <children>
+                  <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                      <children>
+                          <Button defaultButton="true" minWidth="100.0" mnemonicParsing="false" onAction="#loadModData" prefWidth="300.0" text="Load File">
+                              <padding>
+                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </padding>
+                              <VBox.margin>
+                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </VBox.margin>
+                          </Button>
+                  <Separator prefWidth="200.0" />
+                  <ComboBox id="chartTypeComboBox" fx:id="chartTypeComboBox" minWidth="150.0" prefWidth="500.0">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </ComboBox>
+                  <CheckBox id="excludeForgeCheckBox" fx:id="excludeForgeCheckBox" alignment="CENTER_RIGHT" mnemonicParsing="false" selected="true" text="Exclude Forge &amp; MC">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </CheckBox>
+                  <CheckBox id="compessModsCheckBox" fx:id="compressModsCheckBox" alignment="CENTER_RIGHT" mnemonicParsing="false" selected="true" text="Compess less than 1% load times">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </CheckBox>
+                  <Button id="reloadChartButton" fx:id="reloadChartButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#reloadChartDisplay" prefWidth="500.0" text="Reload">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Button>
+                          <Separator prefWidth="200.0" />
+                          <ListView id="entryList" fx:id="entryList" prefHeight="600.0" prefWidth="300.0" />
+                      </children>
+                  </VBox>
+                  <VBox minHeight="800.0" minWidth="700.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                      <children>
+                          <Pane fx:id="mainViewPanel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+                              <children>
+                                  <PieChart id="pieChartOne" fx:id="pieChartOne" legendSide="RIGHT" legendVisible="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" />
+                              </children>
+                          </Pane>
+                          <TextArea id="chartDataTestArea" fx:id="chartDataTestArea" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" />
+                      </children>
+                  </VBox>
+         </children>
+      </HBox>
     </children>
 </AnchorPane>

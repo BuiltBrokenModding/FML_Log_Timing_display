@@ -7,6 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -32,18 +35,33 @@ public class Controller implements Initializable
 
     DecimalFormat percentFormat = new DecimalFormat("##.##%");
 
+    @FXML
+    public ComboBox chartTypeComboBox;
+
+    @FXML
+    public CheckBox excludeForgeCheckBox;
+
+    @FXML
+    public CheckBox compressModsCheckBox;
+
+    @FXML
+    public Button reloadChartButton;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
         //Limit file types
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt", "*.log");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files", "*.txt", "*.log");
         fileChooser.getExtensionFilters().add(extFilter);
     }
 
     @FXML
     public void loadModData(ActionEvent actionEvent)
     {
+        //Reset component states
+        reloadChartButton.setDisable(true);
+
         File file = fileChooser.showOpenDialog(mainGUI.stage);
         if (file != null)
         {
@@ -51,6 +69,7 @@ public class Controller implements Initializable
             loadPieChartDisplay();
             loadModDataList();
             createTextOutput();
+            reloadChartButton.setDisable(false);
         }
         else
         {
@@ -61,12 +80,12 @@ public class Controller implements Initializable
     @FXML
     public void reloadChartDisplay(ActionEvent actionEvent)
     {
-
+        loadPieChartDisplay();
     }
 
     protected void loadPieChartDisplay()
     {
-        mainGUI.pieChart.setData(parser.buildPieChartData());
+        mainGUI.pieChart.setData(parser.buildPieChartData(excludeForgeCheckBox.isSelected(), compressModsCheckBox.isSelected()));
     }
 
     protected void loadModDataList()

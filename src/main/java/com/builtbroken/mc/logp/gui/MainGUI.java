@@ -1,19 +1,15 @@
 package com.builtbroken.mc.logp.gui;
 
-import com.builtbroken.mc.logp.data.ModData;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.HashMap;
 
 /**
  * Primary handler for the GUI
@@ -23,8 +19,6 @@ import java.util.HashMap;
  */
 public class MainGUI extends Application
 {
-    public HashMap<String, ModData> modLoadData = new HashMap();
-
     public Controller controller;
     public Stage stage;
 
@@ -55,17 +49,14 @@ public class MainGUI extends Application
         controller.mainGUI = this;
 
         //Find pie chart
-        SplitPane splitPane = (SplitPane) scene.lookup("#splitPane");
-        AnchorPane node = (AnchorPane) splitPane.getItems().get(1);
-        pieChart = (PieChart) node.lookup("#pieChartOne");
-        chartDataTextArea = (TextArea) node.lookup("#chartDataTestArea");
+        pieChart = (PieChart) scene.lookup("#pieChartOne"); //TODO move to FXML inject
+        chartDataTextArea = (TextArea) scene.lookup("#chartDataTestArea");//TODO move to FXML inject
 
         //Get data list
-        node = (AnchorPane) splitPane.getItems().get(0);
-        chartList = (ListView) node.lookup("#entryList");
+        chartList = (ListView) scene.lookup("#entryList");//TODO move to FXML inject
 
         //Set title
-        stage.setTitle("Forge Load Time Display");
+        stage.setTitle("FML Load Time Visualizer by DarkGuardsman");
 
         //Load scene into stage and show
         stage.setScene(scene);

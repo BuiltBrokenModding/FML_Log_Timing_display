@@ -31,6 +31,8 @@ if (!project.hasProperty("bambooshortPlanName"))
 
 version = "${version_major}.${version_minor}.${version_revis}b" + project.getBuildNumber()
 
+println version
+
 ext.sharedManifest = manifest {
     attributes("Built-By": System.getProperty('user.name'),
                "Created-By": currentJvm,
@@ -73,7 +75,7 @@ jar {
 
 jfx {
     // minimal requirement for jfxJar-task
-    mainClass = mainClass
+    mainClass = 'com.builtbroken.mc.logp.gui.MainGUI'
     
     // minimal requirement for jfxNative-task
     vendor = 'DarkGuardsman'
@@ -84,8 +86,7 @@ publishing {
         mavenJava(MavenPublication)
         {
             artifact jar
-            if (project.hasProperty("minecraft"))
-            artifact deobfJar
+            //artifact jfxNative
             artifact("output/gradle.properties") {
                 classifier "gradle"
                 extension "properties"
@@ -118,4 +119,3 @@ def getDate() {
     def formattedDate = date.format('yyyyMMddHHmmss')
     return formattedDate
 }
-tasks.build.dependsOn deobfJar

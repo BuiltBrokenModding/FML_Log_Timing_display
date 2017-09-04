@@ -51,4 +51,44 @@ jar {
      
      }
 }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication)
+        {
+            artifact jar
+            if (project.hasProperty("minecraft"))
+            artifact deobfJar
+            artifact("output/gradle.properties") {
+                classifier "gradle"
+                extension "properties"
+            }
+            if (project.hasProperty("archivebase") && project.getProperty("archivebase") == "VoltzEngine")
+            artifact apiZip
+            if (project.hasProperty("archivebase") && project.getProperty("archivebase") == "VoltzEngine")
+            artifact templetesZip
+            //from components.java
+            //prints the current date to the pom file.
+            pom.withXml {
+                asNode().appendNode('description', 'Created on ' + getDate())
+            }
+        }
+}
+
+    repositories {
+        maven {
+        //checks for a the local property as a gradle argument and if exists outputs to a local dir.
+            if (project.hasProperty("local") && project.getProperty("local") == "true")
+                url "file:" + projectDir.path + "/build/maven"
+            else
+                url "file:///home/services/dmod/maven"
+        }
+    }
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
 tasks.build.dependsOn deobfJar
